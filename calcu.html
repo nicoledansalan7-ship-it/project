@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator</title>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(120deg, #a06bff, #ff6bc7, #c47bff);
+    background-size: 300% 300%;
+    animation: gradientMove 6s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.calculator {
+    width: 320px;
+    background: rgba(255,255,255,0.15);
+    padding: 20px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 25px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+.display {
+    width: 100%;
+    background: rgba(255,255,255,0.25);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: right;
+    font-size: 2rem;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    min-height: 50px;
+}
+
+.buttons {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.buttons button {
+    padding: 20px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    color: white;
+    background: rgba(255,255,255,0.25);
+}
+
+.buttons button:hover {
+    background: rgba(255,255,255,0.35);
+    transform: scale(1.05);
+}
+
+/* Operator buttons color */
+.buttons button.operator {
+    background: #ff6bc7; /* Pink shade for operators */
+    font-weight: bold;
+}
+
+.buttons button.operator:hover {
+    background: #ff3eb0;
+}
+
+/* Control buttons (DEL, C, %) */
+.buttons .control {
+    background: #6c22ff;
+}
+
+.buttons .control:hover {
+    background: #5518cc;
+}
+
+/* Zero button spans two columns */
+.buttons button.zero {
+    grid-column: span 2;
+}
+</style>
+</head>
+<body>
+
+<div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+        <!-- Top row: DEL, C, % -->
+        <button class="control" onclick="deleteLast()">DEL</button>
+        <button class="control" onclick="clearDisplay()">C</button>
+        <button class="control" onclick="press('%')">%</button>
+        <button class="operator" onclick="press('/')">/</button>
+
+        <!-- Numbers and operators -->
+        <button onclick="press('7')">7</button>
+        <button onclick="press('8')">8</button>
+        <button onclick="press('9')">9</button>
+        <button class="operator" onclick="press('*')">*</button>
+
+        <button onclick="press('4')">4</button>
+        <button onclick="press('5')">5</button>
+        <button onclick="press('6')">6</button>
+        <button class="operator" onclick="press('-')">-</button>
+
+        <button onclick="press('1')">1</button>
+        <button onclick="press('2')">2</button>
+        <button onclick="press('3')">3</button>
+        <button class="operator" onclick="press('+')">+</button>
+
+        <button class="zero" onclick="press('0')">0</button>
+        <button onclick="press('.')">.</button>
+        <button class="operator" onclick="calculate()">=</button>
+    </div>
+</div>
+
+<script>
+let currentInput = '';
+
+function press(value) {
+    currentInput += value;
+    document.getElementById('display').innerText = currentInput;
+}
+
+function calculate() {
+    try {
+        const expression = currentInput.replace(/%/g, '/100');
+        currentInput = eval(expression).toString();
+        document.getElementById('display').innerText = currentInput;
+    } catch {
+        document.getElementById('display').innerText = 'Error';
+        currentInput = '';
+    }
+}
+
+function clearDisplay() {
+    currentInput = '';
+    document.getElementById('display').innerText = '0';
+}
+
+function deleteLast() {
+    currentInput = currentInput.slice(0, -1);
+    if (currentInput === '') currentInput = '0';
+    document.getElementById('display').innerText = currentInput;
+}
+</script>
+
+</body>
+</html>
